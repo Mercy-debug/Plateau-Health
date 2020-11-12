@@ -5,7 +5,9 @@ const app = express()
 const logger = require('morgan')
 const bodyParser= require('body-parser')
 const mongoose = require('mongoose')
-const DB = require('./config/db').MONGO_URI
+const bcrypt = require('bcryptjs')
+const passport = require('passport')
+const DB = require('./config/keys').MONGO_URI
 const port = process.env.PORT || 4000
 
 
@@ -22,6 +24,12 @@ mongoose.connect(DB, {useNewUrlParser:true, useCreateIndex:true, useUnifiedTopol
 app.use(logger(process.env.SERVICE_INDEX))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+
+//configure passport middleware
+passport.use(passport.initialize())
+
+//passport config
+require('./config/passport')(passport)
 
 
 // route grouping

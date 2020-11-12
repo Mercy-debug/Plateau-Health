@@ -8,9 +8,8 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    name: {
-        type: String
-        // required: true
+    name:{
+        type:String,
     },
     email: {
         type: String,
@@ -22,6 +21,17 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
+    userName: {
+        type: String,
+        unique: true
+    },
+    password: {
+        type: String
+    },
+    date_registered: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
 module.exports = User = mongoose.model('user', userSchema)

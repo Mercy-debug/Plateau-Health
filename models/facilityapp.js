@@ -15,6 +15,10 @@ const FacilityAppSchema = new Schema({
     },
     facilityAdd: {
         type: String
+    },
+    message:{
+        type:String,
+        default: "Accreditation is pending"
     }
     
 });
