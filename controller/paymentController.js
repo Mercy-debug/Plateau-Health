@@ -80,6 +80,17 @@ module.exports = {
           }
           return err
         })
-      }
+      },
+
+      paymentCount: async(req, res)=>{
+        Payment.countDocuments({}, (err, payments)=>{
+            if (err) throw err
+            else{
+                res.json({
+                    message: `number of active subscribers are ${payments} `
+                })
+            }
+        })
+    },
 
   }

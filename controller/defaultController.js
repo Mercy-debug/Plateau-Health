@@ -12,7 +12,7 @@ const randomString = require('randomstring')
 
 module.exports = {
     registerPost: async (req, res, err) => {
-        const { name,email, phoneNumber, userName, password } = req.body
+        const { name, email, phoneNumber, userName, password } = req.body
         const userID = randomString.generate({
             length: 5,
             charset: 'numeric'
@@ -160,6 +160,17 @@ module.exports = {
         })
         }
       
+    },
+
+    facilityCount: async(req, res)=>{
+        Facility.countDocuments({}, (err, facilities)=>{
+            if (err) throw err
+            else{
+                res.json({
+                    message: `number of registered faciliies is ${facilities} `
+                })
+            }
+        })
     },
     loginPost: async(req, res, next)=>{
         const {userName, password} = req.body
