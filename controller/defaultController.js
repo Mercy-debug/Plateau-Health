@@ -175,7 +175,12 @@ module.exports = {
     loginPost: async(req, res, next)=>{
         const {userName, password} = req.body
         console.log(req.body)
-        User.findOne({userName}).then((user)=>{
+        if(!userName || !password){
+            res.json({
+              message: "all field required"
+            })
+           }else{
+        await User.findOne({userName}).then((user)=>{
             if (!user){
                 res.status(400).json({
                     message: 'no user with this username found'
@@ -209,6 +214,7 @@ module.exports = {
                 }
             })
         })
+    }
     },
 
 
