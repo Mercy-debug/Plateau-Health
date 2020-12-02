@@ -28,6 +28,9 @@ const userSchema = new Schema({
     password: {
         type: String
     },
+    avatar: {
+        type: String
+    },
     date_registered: {
         type: Date,
         default: Date.now()

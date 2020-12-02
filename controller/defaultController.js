@@ -8,16 +8,19 @@ const User = require('../models/user')
 const Facility = require('../models/facility')
 const FacilityApp = require ('../models/facilityapp')
 const randomString = require('randomstring')
+const cloudinary = require('../config/cloudinary')
 
 
 module.exports = {
     registerPost: async (req, res, err) => {
         const { name, email, phoneNumber, userName, password } = req.body
+        const avatar = req.file
         const userID = randomString.generate({
             length: 5,
             charset: 'numeric'
         })
         console.log(req.body)
+        console.log(req.file)
         User.findOne({ userName}).then((user) => {
             if (user) {
                 return res.status(500).json({
@@ -25,22 +28,25 @@ module.exports = {
                     data:null
                 })
             } else {
-                User.findOne({phoneNumber}).then((user)=>{
+                User.findOne({phoneNumber}).then(async(user)=>{
                     if(user){
                         return res.status(500).json({
                             message:"Phone number already registered",
                             data: null
                         })
                     }else{
-
+                        await cloudinary.v2.uploader.upload(req.file.path, async(err,result)=>{
+                            console.log("consoling result:::::::",result)
                 newUser = new User({
                     name,
                     userName,
                     password,
                     email,
                     phoneNumber,
-                    userID
+                    userID,
+                    avatar:result.secure_url
                 })
+                        })
                 bcrypt.genSalt(10,(err, salt)=>{
                     bcrypt.hash(newUser.password, salt, (err, hash)=>{
                         if (err)throw err
@@ -177,7 +183,7 @@ module.exports = {
         console.log(req.body)
         if(!userName || !password){
             res.json({
-              message: "all field required"
+              message: "all fields are required"
             })
            }else{
         await User.findOne({userName}).then((user)=>{
